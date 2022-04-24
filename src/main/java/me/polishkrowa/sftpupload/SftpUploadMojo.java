@@ -34,6 +34,12 @@ public class SftpUploadMojo extends AbstractMojo {
     @Parameter(property = "userhome", defaultValue = "${user.home}")
     String userhome;
 
+    @Parameter(property = "perm")
+    String perm;
+
+    @Parameter(property = "groupGid")
+    String groupGid;
+
 
 
     @Override
@@ -43,18 +49,27 @@ public class SftpUploadMojo extends AbstractMojo {
         }
 
         try {
+            //upload source to to
+            if (perm != null)
+            Integer.parseInt(perm, 8);
+            if (groupGid != null)
+            Integer.parseInt(groupGid);
+
             ChannelSftp channelSftp = setupJsch();
             channelSftp.connect();
-            //upload source to to
             channelSftp.put(project.getArtifact().getFile().getAbsolutePath(), to);
-            channelSftp.chmod(504, to);
-            channelSftp.chgrp(1004, to);
+            if (perm != null)
+                channelSftp.chmod(Integer.parseInt(perm,8), to);
+            if (groupGid != null)
+                channelSftp.chgrp(Integer.parseInt(groupGid), to);
             channelSftp.exit();
             getLog().info("Uploaded " + source + " to " + to);
 
         } catch (JSchException | SftpException e) {
             getLog().error("Error while uploading " + source + " to " + to);
             e.printStackTrace();
+        } catch (NumberFormatException e) {
+            throw new MojoFailureException("Permission and groupGid must be valid numbers");
         }
     }
 
