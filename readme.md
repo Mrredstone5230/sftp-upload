@@ -1,7 +1,7 @@
-#sftpupload - maven plugin
+# sftpupload - maven plugin
 ***I have no idea about what I'm doing.***
 
-##**TESTED AND MADE ON MACOS. HAS SOME NON-WINDOWS FRIENDLY CODE (At least I think)**
+### **TESTED AND MADE ON MACOS. HAS SOME NON-WINDOWS FRIENDLY CODE (At least I think)**
 
 this maven plugin allows to upload build artefact to a remove sftp server.
 
