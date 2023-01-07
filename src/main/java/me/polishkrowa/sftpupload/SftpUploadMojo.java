@@ -51,9 +51,9 @@ public class SftpUploadMojo extends AbstractMojo {
         try {
             //upload source to to
             if (perm != null)
-            Integer.parseInt(perm, 8);
+                Integer.parseInt(perm, 8);
             if (groupGid != null)
-            Integer.parseInt(groupGid);
+                Integer.parseInt(groupGid);
 
             ChannelSftp channelSftp = setupJsch();
             channelSftp.connect();
@@ -75,7 +75,9 @@ public class SftpUploadMojo extends AbstractMojo {
 
     private ChannelSftp setupJsch() throws JSchException {
         JSch jsch = new JSch();
-        jsch.setKnownHosts(userhome + "/.ssh/known_hosts");
+        if (!System.getProperty("os.name").toLowerCase().contains("windows")) {
+            jsch.setKnownHosts(userhome + "/.ssh/known_hosts");
+        }
         Session jschSession = jsch.getSession(user, host);
         jschSession.setPassword(password);
         jschSession.connect();
